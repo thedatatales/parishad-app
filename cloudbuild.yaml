@@ -1,0 +1,45 @@
+steps:
+  # Step 1: Install dependencies and run tests
+  - name: 'python:3.9'
+    id: 'Run Tests'
+    entrypoint: 'bash'
+    args: ['-c', 'pip install -r requirements.txt && pytest tests/']
+
+  # Step 2: Set up Docker Buildx
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Set Up Buildx'
+    args: ['buildx', 'create', '--use', '--name', 'multi-platform-builder', '--platform', 'linux/amd64,linux/arm64']
+
+  # Step 3: Build and push multi-platform image
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Build Image'
+    args: 
+      - 'buildx'
+      - 'build'
+      - '--platform'
+      - 'linux/amd64,linux/arm64'
+      - '-t'
+      - 'us-central1-docker.pkg.dev/parishad/parishad-container-registry/app-image:latest'
+      - '--push'
+      - '.'
+
+  # Step 4: Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'Deploy to Cloud Run'
+    args:
+      - 'gcloud'
+      - 'run'
+      - 'deploy'
+      - 'parishad-app'
+      - '--image=us-central1-docker.pkg.dev/parishad/parishad-container-registry/app-image:latest'
+      - '--region=us-central1'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+
+images:
+  - 'us-central1-docker.pkg.dev/parishad/parishad-container-registry/app-image:latest'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+  workerPool: projects/parishad/locations/us-central1/workerPools/default
+  serviceAccount: projects/parishad/serviceAccounts/parishad-cloudbuild-sa@parishad.iam.gserviceaccount.com
