@@ -3,9 +3,8 @@ steps:
   - name: 'python:3.9'
     id: 'Run Tests'
     entrypoint: 'bash'
-    args: ['-c', 'pip install -r requirements.txt && pytest tests/']  # Use relative path
-    dir: '..'  # ← Set working directory to parent (parishad-ci-cd)
-    
+    args: ['-c', 'pip install -r requirements.txt && pytest tests/']
+
   # Step 2: Set up Docker Buildx
   - name: 'gcr.io/cloud-builders/docker'
     id: 'Set Up Buildx'
