@@ -19,7 +19,7 @@ steps:
       - '--platform'
       - 'linux/amd64,linux/arm64'
       - '-t'
-      - 'us-central1-docker.pkg.dev/parishad/parishad-container-registry/app-image'  # ← Removed :latest
+      - 'us-central1-docker.pkg.dev/parishad/parishad-container-registry/app-image'  # ← Correct repository
       - '--push'
       - '.'
 
@@ -31,13 +31,13 @@ steps:
       - 'run'
       - 'deploy'
       - 'parishad-app'
-      - '--image=us-central1-docker.pkg.dev/parishad/parishad-container-registry/app-image'  # ← Removed :latest
+      - '--image=us-central1-docker.pkg.dev/parishad/parishad-container-registry/app-image'  # ← Correct repository
       - '--region=us-central1'
       - '--platform=managed'
       - '--allow-unauthenticated'
 
 images:
-  - 'us-central1-docker.pkg.dev/parishad/parishad-container-registry/app-image'  # ← Removed :latest
+  - 'us-central1-docker.pkg.dev/parishad/parishad-container-registry/app-image'  # ← Correct repository
 
 options:
   logging: CLOUD_LOGGING_ONLY
