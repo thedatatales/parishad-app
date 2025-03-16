@@ -39,6 +39,7 @@ steps:
 images:
   - 'us-central1-docker.pkg.dev/parishad/parishad-container-registry/app-image:latest'
 
+# Updated cloudbuild.yaml for Cloud Build trigger  
 options:
   logging: CLOUD_LOGGING_ONLY
   workerPool: projects/parishad/locations/us-central1/workerPools/default
